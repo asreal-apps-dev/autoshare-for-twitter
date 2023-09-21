@@ -202,14 +202,18 @@ function compose_tweet_body( \WP_Post $post ) {
 		$post_tags .= "#" . $tag->name . PHP_EOL;
 	}
 
+	$post_tags = mb_convert_encoding( $post_tags, 'UTF-8', 'UTF-8');
+
 	$url               = esc_url( $url );
 	$body_max_length   = 275 - strlen( $url ) - strlen( $post_tags ); // 275 instead of 280 because of the space between body and URL and the ellipsis.
 	$tweet_body        = sanitize_text_field( $tweet_body );
 	$tweet_body        = html_entity_decode( $tweet_body, ENT_QUOTES, get_bloginfo( 'charset' ) );
+	$tweet_body        = mb_convert_encoding( $tweet_body, 'UTF-8', 'UTF-8');
 	$tweet_body_length = strlen( $tweet_body );
 	$ellipsis          = ''; // Initialize as empty. Will be set if the tweet body is too long.
 
 	while ( $body_max_length < $tweet_body_length ) {
+
 		// We can't use `&hellip;` here or it will display encoded when tweeting.
 		$ellipsis = ' ...';
 
@@ -226,9 +230,7 @@ function compose_tweet_body( \WP_Post $post ) {
 		$tweet_body_length = strlen( $tweet_body );
 	}
 
-	$tweet_body .= $post_tags;
-
-	return sprintf( '%s%s %s', $tweet_body, $ellipsis, $url );
+	return 	mb_convert_encoding(sprintf( '%s%s%s %s', $tweet_body, $ellipsis , $post_tags, '' ), 'UTF-8', 'UTF-8');
 }
 
 /**
