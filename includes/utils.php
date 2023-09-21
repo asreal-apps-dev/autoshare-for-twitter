@@ -230,7 +230,7 @@ function compose_tweet_body( \WP_Post $post ) {
 		$tweet_body_length = strlen( $tweet_body );
 	}
 
-	return 	mb_convert_encoding(sprintf( '%s%s%s %s', $tweet_body, $ellipsis , $post_tags, '' ), 'UTF-8', 'UTF-8');
+	return 	mb_convert_encoding(sprintf( '%s%s%s %s', $tweet_body, $ellipsis , $post_tags, $url ), 'UTF-8', 'UTF-8');
 }
 
 /**
